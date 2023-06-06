@@ -13,7 +13,8 @@ import {
   Box,
 } from "native-base";
 import NativeBaseIcon from "./components/NativeBaseIcon";
-import { Platform } from "react-native";
+import { Platform, StatusBar } from "react-native";
+import Sensores from "./components/Sensores";
 
 // Define the config
 const config = {
@@ -27,15 +28,18 @@ export const theme = extendTheme({ config });
 export default function App() {
   return (
     <NativeBaseProvider>
+      <StatusBar style="auto" />
       <Center
         _dark={{ bg: "blueGray.900" }}
         _light={{ bg: "blueGray.50" }}
         px={4}
-        flex={1}
-      >
+        flex={1}>
         <VStack space={5} alignItems="center">
           <NativeBaseIcon />
-          <Heading size="lg">Welcome to NativeBase</Heading>
+          <Heading size="lg">Welcome to aNativeBase</Heading>
+          <ToggleDarkMode />
+          <Sensores />
+
           <HStack space={2} alignItems="center">
             <Text>Edit</Text>
             <Box
@@ -48,8 +52,7 @@ export default function App() {
               px={2}
               py={1}
               _dark={{ bg: "blueGray.800" }}
-              _light={{ bg: "blueGray.200" }}
-            >
+              _light={{ bg: "blueGray.200" }}>
               App.js
             </Box>
             <Text>and save to reload.</Text>
