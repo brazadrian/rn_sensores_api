@@ -4,7 +4,7 @@ import { FlatList, Text } from "react-native";
 import sensores from "./sensor_api";
 
 function Sensores() {
-  const data = sensores._j;
+  const data = sensores;
   return (
     <Box>
       <Heading fontSize="xl" p="4" pb="3">
