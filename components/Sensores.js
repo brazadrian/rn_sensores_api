@@ -1,4 +1,4 @@
-import { Avatar, Box, HStack, Heading, Spacer, VStack } from "native-base";
+import { Box, HStack, Heading, Spacer, VStack } from "native-base";
 import { FlatList, Text } from "react-native";
 
 import sensores from "./sensor_api";

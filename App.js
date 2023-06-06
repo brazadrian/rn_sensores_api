@@ -12,7 +12,6 @@ import {
   VStack,
   Box,
 } from "native-base";
-import NativeBaseIcon from "./components/NativeBaseIcon";
 import { Platform, StatusBar } from "react-native";
 import Sensores from "./components/Sensores";
 
@@ -29,15 +28,9 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <StatusBar style="auto" />
-      <Center
-        _dark={{ bg: "blueGray.900" }}
-        _light={{ bg: "blueGray.50" }}
-        px={4}
-        flex={1}>
-        <VStack space={5} alignItems="center">
-          <NativeBaseIcon />
-          <Heading size="lg">Welcome to aNativeBase</Heading>
-          <ToggleDarkMode />
+      <Center px={4} flex={1}>
+        <VStack space={2} alignItems="center">
+          <Heading size="lg">Sensores</Heading>
           <Sensores />
 
           <HStack space={2} alignItems="center">
@@ -50,9 +43,7 @@ export default function App() {
                 },
               }}
               px={2}
-              py={1}
-              _dark={{ bg: "blueGray.800" }}
-              _light={{ bg: "blueGray.200" }}>
+              py={1}>
               App.js
             </Box>
             <Text>and save to reload.</Text>
@@ -62,27 +53,8 @@ export default function App() {
               Learn NativeBase
             </Text>
           </Link>
-          <ToggleDarkMode />
         </VStack>
       </Center>
     </NativeBaseProvider>
-  );
-}
-
-// Color Switch Component
-function ToggleDarkMode() {
-  const { colorMode, toggleColorMode } = useColorMode();
-  return (
-    <HStack space={2} alignItems="center">
-      <Text>Dark</Text>
-      <Switch
-        isChecked={colorMode === "light"}
-        onToggle={toggleColorMode}
-        aria-label={
-          colorMode === "light" ? "switch to dark mode" : "switch to light mode"
-        }
-      />
-      <Text>Light</Text>
-    </HStack>
-  );
+  );s
 }
