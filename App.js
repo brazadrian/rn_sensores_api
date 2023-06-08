@@ -29,11 +29,14 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <StatusBar style="auto" />
-
-      <Heading size="lg">Sensores</Heading>
-      <HStack alignItems="center">
-        <TableScreen />
-      </HStack>
+      <VStack>
+        <Heading size="lg">Pessoas</Heading>
+        <HStack alignItems="center">
+          <TableScreen />
+        </HStack>
+        <Heading size="lg">Sensores</Heading>
+        <Sensores />
+      </VStack>
     </NativeBaseProvider>
     // <NativeBaseProvider>
     //   <StatusBar style="auto" />

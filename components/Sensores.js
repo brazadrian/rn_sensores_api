@@ -4,14 +4,43 @@ import { FlatList, Text } from "react-native";
 import sensores from "./sensor_api";
 
 function Sensores() {
-  const data = sensores;
+  const dados_sensores = sensores;
+  dados_sensores
+    .then((data) => {
+      teste = JSON.parse(JSON.stringify(data));
+
+      sensores_resgatados = [
+        {
+          _id: teste[0]._id,
+          nome: teste[0].nome,
+          descricao: teste[0].descricao,
+          id: teste[0].id,
+          x: teste[0].x,
+          y: teste[0].y,
+          area: teste[0].area,
+          status: teste[0].status,
+          tipo: teste[0].tipo,
+          __v: teste[0].__v,
+        },
+      ];
+
+      return sensores_resgatados;
+    })
+    .catch((error) => {
+      console.log(error);
+      console.error("Houve algum erro na conexão, error: " + error);
+    })
+    .finally(() => {
+      console.log("Conexão com API finalizada.");
+    });
+
   return (
     <Box>
-      <Heading fontSize="xl" p="4" pb="3">
+      <Text></Text>
+      {/* <Heading fontSize="xl" p="4" pb="3">
         Sensores
-      </Heading>
-      <FlatList
-        data={data}
+      </Heading> */}
+      {/* <FlatList
         renderItem={({ item }) => (
           <Box
             borderBottomWidth="1"
@@ -32,7 +61,7 @@ function Sensores() {
           </Box>
         )}
         keyExtractor={(item) => item._id}
-      />
+      /> */}
     </Box>
   );
 }

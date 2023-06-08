@@ -36,15 +36,6 @@ export default (props) => {
 
 export default TableScreen = () => {
   const data_ts = ts;
-  
-  /* Saída de dados pelo console */
-  data_ts.map((pessoa) => {
-    console.log(
-      "ID: " + pessoa.id,
-      "Idade: " + pessoa.age,
-      "Nome: " + pessoa.name
-    );
-  });
 
   return (
     <View style={styles.container}>
