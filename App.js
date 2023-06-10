@@ -1,79 +1,116 @@
-import React from "react";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 import {
+  StyleSheet,
   Text,
-  Link,
-  HStack,
-  Center,
-  Heading,
-  Switch,
-  useColorMode,
-  NativeBaseProvider,
-  extendTheme,
-  VStack,
-  Box,
-} from "native-base";
-import { Platform, StatusBar } from "react-native";
-import Sensores from "./components/Sensores";
-import TableScreen from "./components/TableScreen";
+  ScrollView,
+  View,
+  Image,
+  Platform,
+  TouchableHighlight,
+} from "react-native";
 
-// Define the config
-const config = {
-  useSystemColorMode: false,
-  initialColorMode: "dark",
-};
+import Constants from "expo-constants";
 
-// extend the theme
-export const theme = extendTheme({ config });
+const baseUrl = "https://reqres.in";
+
+function User({ userObject }) {
+  return (
+    <View>
+      <Image
+        source={{ uri: userObject.avatar }}
+        style={{ width: 200, height: 200, borderRadius: 100 }}
+      />
+      <Text style={{ textAlign: "center", fontSize: 20 }}>
+        {`${userObject.first_name} ${userObject.last_name}`}
+      </Text>
+    </View>
+  );
+}
 
 export default function App() {
-  return (
-    <NativeBaseProvider>
-      <StatusBar style="auto" />
-      <VStack>
-        <Heading size="lg">Pessoas</Heading>
-        <HStack alignItems="center">
-          <TableScreen />
-        </HStack>
-        <Heading size="lg">Sensores</Heading>
-        <Sensores />
-      </VStack>
-    </NativeBaseProvider>
-    // <NativeBaseProvider>
-    //   <StatusBar style="auto" />
-    //   <Center px={4} flex={1}>
-    //     <VStack space={2} alignItems="center">
-    //       <Heading size="lg">Sensores</Heading>
-    //       <Sensores />
+  const [userId, setUserId] = useState(1);
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setErrorFlag] = useState(false);
 
-    // <NativeBaseProvider>
-    //   <StatusBar style="auto" />
-    //   <Center px={4} flex={1}>
-    //     <VStack space={2} alignItems="center">
-    //       <Heading size="lg">Sensores</Heading>
-    //       <Sensores />
-    //       <HStack space={2} alignItems="center">
-    //         <Text>Edit</Text>
-    //         <Box
-    //           _web={{
-    //             _text: {
-    //               fontFamily: "monospace",
-    //               fontSize: "sm",
-    //             },
-    //           }}
-    //           px={2}
-    //           py={1}>
-    //           App.js
-    //         </Box>
-    //         <Text>and save to reload.</Text>
-    //       </HStack>
-    //       <Link href="https://docs.nativebase.io" isExternal>
-    //         <Text color="primary.500" underline fontSize={"xl"}>
-    //           Learn NativeBase
-    //         </Text>
-    //       </Link>
-    //     </VStack>
-    //   </Center>
-    //   </NativeBaseProvider>
+  const changeUserIdHandler = () => {
+    setUserId((userId) => (userId === 3 ? 1 : userId + 1));
+  };
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const url = `${baseUrl}/api/users/${userId}`;
+
+    const fetchUsers = async () => {
+      try {
+        setIsLoading(true);
+
+        const response = await axios.get(url, {
+          signal: abortController.signal,
+        });
+
+        if (response.status === 200) {
+          setUser(response.data.data);
+          setIsLoading(false);
+
+          return;
+        } else {
+          throw new Error("Failed to fetch users");
+        }
+      } catch (error) {
+        if (abortController.signal.aborted) {
+          console.log("Data fetching cancelled");
+        } else {
+          setErrorFlag(true);
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchUsers();
+
+    return () => abortController.abort("Data fetching cancelled");
+  }, [userId]);
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.wrapperStyle}>
+        {!isLoading && !hasError && user && <User userObject={user} />}
+      </View>
+      <View style={styles.wrapperStyle}>
+        {isLoading && <Text> Loading </Text>}
+        {!isLoading && hasError && <Text> An error has occurred </Text>}
+      </View>
+      <View>
+        <TouchableHighlight
+          onPress={changeUserIdHandler}
+          disabled={isLoading}
+          style={styles.buttonStyles}>
+          <Text style={styles.textStyles}>Get New User</Text>
+        </TouchableHighlight>
+      </View>
+    </ScrollView>
   );
-  s;
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight,
+  },
+  wrapperStyle: {
+    minHeight: 128,
+  },
+  buttonStyles: {
+    backgroundColor: "dodgerblue",
+  },
+  textStyles: {
+    fontSize: 20,
+    color: "white",
+    padding: 10,
+  },
+});
